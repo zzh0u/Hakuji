@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book Checkout</title>
+</head>
+<body>
+    <h1>Add Book Checkout</h1>
+    <form id="checkoutForm">
+        <label for="book_id">Book ID:</label>
+        <input type="text" id="book_id" name="book_id" required><br><br>
+        <label for="user">User:</label>
+        <input type="text" id="user" name="user" required><br><br>
+        <label for="checkout_date">Checkout Date:</label>
+        <input type="date" id="checkout_date" name="checkout_date" required><br><br>
+        <input type="hidden" id="is_genesis" name="is_genesis" value="false">
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const bookID = document.getElementById('book_id').value;
+            const user = document.getElementById('user').value;
+            const checkoutDate = document.getElementById('checkout_date').value;
+            const isGenesis = document.getElementById('is_genesis').value;
+
+            const data = {
+                book_id: bookID,
+                user: user,
+                checkout_date: checkoutDate,
+                is_genesis: isGenesis === 'true'
+            };
+
+            fetch('http://localhost:3000', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => alert('Success: ' + JSON.stringify(result)))
+            .catch(error => alert('Error: ' + error));
+        }
+    </script>
+</body>
+</html>
