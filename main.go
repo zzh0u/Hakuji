@@ -59,6 +59,7 @@ func newBook(w http.ResponseWriter, r *http.Request) {
 	h := md5.New()
 	io.WriteString(h, book.ISBN+book.PublishDate)
 	book.ID = fmt.Sprintf("%x", h.Sum(nil))
+	fmt.Println(book)
 
 	// send back payload
 	resp, err := json.MarshalIndent(book, "", " ")
