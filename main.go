@@ -77,9 +77,9 @@ func main() {
 	BlockChain = block.NewBlockchain()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", getBlockchain).Methods("GET")
-	r.HandleFunc("/", writeBlock).Methods("POST")
-	r.HandleFunc("/new", newBook).Methods("POST")
+	r.HandleFunc("/getBook", getBlockchain).Methods("GET")
+	r.HandleFunc("/borrowBook", writeBlock).Methods("POST")
+	r.HandleFunc("/newBook", newBook).Methods("POST")
 
 	go func() {
 		for _, block := range BlockChain.Blocks {
