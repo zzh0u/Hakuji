@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"blockchain/block"
+	"Hakuji/block"
 	"github.com/gorilla/mux"
 )
 
@@ -25,7 +25,7 @@ func getBlockchain(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(jbytes))
 }
 
-// Handler根据发送的信息添加一个新区块
+// Handler根据发送的信息添加一个新区块，借阅记录
 func writeBlock(w http.ResponseWriter, r *http.Request) {
 	var checkoutItem block.BookCheckout
 	if err := json.NewDecoder(r.Body).Decode(&checkoutItem); err != nil {
