@@ -11,7 +11,7 @@
 具体使用方法：
 
 ```bash
-curl -X POST http://localhost:3000/new \
+curl http://localhost:3000/newBook \
   -H "Content-Type: application/json" \
   -d '{"title": "All about Lily Chou-chou", "author":"Shunji Iwai", 
 "isbn":"9787544244398","publish_date":"2009-07-01"}'
@@ -20,7 +20,7 @@ curl -X POST http://localhost:3000/new \
 这将会返回一个书目 ID，有了书目ID 之后，再发送借阅记录
 
 ```bash
-curl -X POST http://localhost:3000 \
+curl http://localhost:3000/borrowBook \
   -H "Content-Type: application/json" \
   -d '{"book_id": "BOOK_ID", "user": "USER", 
 "checkout_date":"2024-08-29"}'
