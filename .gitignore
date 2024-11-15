@@ -8,5 +8,5 @@
 /dataSources.local.xml
 
 /tmp
-tmp/main
-.DS_Store
+/.idea
+.DS_Stoe
