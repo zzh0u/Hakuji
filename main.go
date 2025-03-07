@@ -8,7 +8,8 @@ import (
 	"log"
 	"net/http"
 
-	"Hakuji/block"
+	"hakuji/block"
+
 	"github.com/gorilla/mux"
 )
 

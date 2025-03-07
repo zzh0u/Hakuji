@@ -1,4 +1,4 @@
-module Hakuji
+module hakuji
 
 go 1.21
 
