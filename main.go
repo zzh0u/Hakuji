@@ -17,6 +17,8 @@ var BlockChain *block.Blockchain
 
 // Handler 将区块链作为 json 字符串写回浏览器
 func getBlockchain(w http.ResponseWriter, r *http.Request) {
+	// prefix:""	每行前缀
+	// indent:" "	缩进字符
 	jbytes, err := json.MarshalIndent(BlockChain.Blocks, "", " ")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -56,7 +58,7 @@ func newBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 使用生成 ID 作为区块添加
-	// 创建 ID 连接 (concatenating) ISDB 和发售日
+	// 创建 ID 连接 ISBN 和发售日
 	h := md5.New()
 	io.WriteString(h, book.ISBN+book.PublishDate)
 	book.ID = fmt.Sprintf("%x", h.Sum(nil))

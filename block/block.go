@@ -35,7 +35,7 @@ type Blockchain struct {
 }
 
 func (bc *Blockchain) AddBlock(data BookCheckout) {
-	prevBlock := bc.Blocks[len(bc.Blocks)-1] //?
+	prevBlock := bc.Blocks[len(bc.Blocks)-1]
 
 	block := CreateBlock(prevBlock, data)
 
@@ -70,12 +70,13 @@ func CreateBlock(prevBlock *Block, checkoutItem BookCheckout) *Block {
 	return block
 }
 
-func GenesisBlock() *Block {
-	return CreateBlock(&Block{}, BookCheckout{IsGenesis: true}) //?
+// 私有，仅函数内部可调用
+func genesisBlock() *Block {
+	return CreateBlock(&Block{}, BookCheckout{IsGenesis: true})
 }
 
 func NewBlockchain() *Blockchain {
-	return &Blockchain{[]*Block{GenesisBlock()}} //?
+	return &Blockchain{[]*Block{genesisBlock()}}
 }
 
 func validBlock(block, prevBlock *Block) bool {
