@@ -15,7 +15,7 @@ import (
 
 var BlockChain *block.Blockchain
 
-// Handler将区块链作为json字符串写回浏览器
+// Handler 将区块链作为 json 字符串写回浏览器
 func getBlockchain(w http.ResponseWriter, r *http.Request) {
 	jbytes, err := json.MarshalIndent(BlockChain.Blocks, "", " ")
 	if err != nil {
@@ -23,10 +23,10 @@ func getBlockchain(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err)
 		return
 	}
-	io.WriteString(w, string(jbytes))
+	w.Write(jbytes)
 }
 
-// Handler根据发送的信息添加一个新区块，借阅记录
+// Handler 根据发送的信息添加一个新区块，借阅记录
 func writeBlock(w http.ResponseWriter, r *http.Request) {
 	var checkoutItem block.BookCheckout
 	if err := json.NewDecoder(r.Body).Decode(&checkoutItem); err != nil {
@@ -46,7 +46,7 @@ func writeBlock(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-// 创建新的Book数据
+// 创建新的 Book 数据
 func newBook(w http.ResponseWriter, r *http.Request) {
 	var book block.Book
 	if err := json.NewDecoder(r.Body).Decode(&book); err != nil {
@@ -55,8 +55,8 @@ func newBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 使用生成ID作为区块添加
-	// 创建ID 连接(concatenating) ISDB和发售日
+	// 使用生成 ID 作为区块添加
+	// 创建 ID 连接 (concatenating) ISDB 和发售日
 	h := md5.New()
 	io.WriteString(h, book.ISBN+book.PublishDate)
 	book.ID = fmt.Sprintf("%x", h.Sum(nil))
