@@ -8,5 +8,6 @@
 /dataSources.local.xml
 
 /tmp
+/*/tmp
 /.idea
 .DS_Stoe
