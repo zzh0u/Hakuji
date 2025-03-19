@@ -32,7 +32,7 @@ curl http://localhost:3000/borrowBook \
 
 1. [x] 后端实现
 2. [ ] 前端实现
-3. [ ] Mysql 数据库实现
+3. [ ] Postgres 数据库实现
 4. [ ] 测试
     1. [ ] 数据合法性检测
     2. [ ] 书库查重
