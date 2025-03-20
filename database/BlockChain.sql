@@ -1,97 +1,103 @@
 CREATE TABLE book (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    isbn VARCHAR(18) UNIQUE NOT NULL COMMENT '国际标准书号，唯一标识一本书',
-    title VARCHAR(255) NOT NULL COMMENT '书名以及副标题',
-    author VARCHAR(100) NOT NULL COMMENT '作者姓名，支持多个作者和译者',
-    cover_url VARCHAR(255) DEFAULT '' COMMENT '封面图片 CDN 相对路径格式: /covers/{book_id}_{timestamp}.jpg',
-    cover_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '最后更新时间，用于客户端缓存刷新',
-    publisher VARCHAR(100) NOT NULL COMMENT '出版社名称',
-    published_date DATE NOT NULL COMMENT '出版日期',
-    category VARCHAR(50) NOT NULL COMMENT '图书分类，如玄幻、科幻、数学、物理、计算机等',
-    content_summary TEXT COMMENT '图书内容简介',
-    rating DECIMAL(3,1) DEFAULT 0.0 COMMENT '图书评分，范围 0.0-9.9，步长0.1',
-    download_count INT DEFAULT 0 COMMENT '下载次数',
+    id SERIAL PRIMARY KEY,
+    isbn VARCHAR(18) UNIQUE NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    cover_url VARCHAR(255) DEFAULT '',
+    hash VARCHAR(64) NOT NULL,
+    pre_hash VARCHAR(64) NOT NULL,
+    publisher VARCHAR(100) NOT NULL,
+    published_date DATE NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    content_summary TEXT,
+    rating DECIMAL(3,1) DEFAULT 0.0,
+    download_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '图书表'
+    deleted_at TIMESTAMP DEFAULT NULL
+);
+
+COMMENT ON TABLE book IS '图书表';
+COMMENT ON COLUMN book.isbn IS '国际标准书号，唯一标识一本书';
+COMMENT ON COLUMN book.title IS '书名以及副标题';
+COMMENT ON COLUMN book.author IS '作者姓名，支持多个作者和译者';
+COMMENT ON COLUMN book.cover_url IS '封面图片 CDN 相对路径格式: /covers/{book_id}_{timestamp}.jpg';
+COMMENT ON COLUMN book.hash IS '区块哈希值';
+COMMENT ON COLUMN book.pre_hash IS '区块哈希值';
+COMMENT ON COLUMN book.publisher IS '出版社名称';
+COMMENT ON COLUMN book.published_date IS '出版日期';
+COMMENT ON COLUMN book.category IS '图书分类，如玄幻、科幻、数学、物理、计算机等';
+COMMENT ON COLUMN book.content_summary IS '图书内容简介';
+COMMENT ON COLUMN book.rating IS '图书评分，范围 0.0-9.9，步长0.1';
+COMMENT ON COLUMN book.download_count IS '下载次数';
+COMMENT ON COLUMN book.created_at IS '创建时间';
+COMMENT ON COLUMN book.deleted_at IS '删除时间，逻辑删除，非空为已删除';
 
 CREATE TABLE user (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    avatar_url VARCHAR(255) DEFAULT '' COMMENT 'CDN 相对路径格式: /avatars/{user_id}_{timestamp}.jpg',
-    avatar_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '最后更新时间，用于客户端缓存刷新',
-    username VARCHAR(50) UNIQUE NOT NULL COMMENT '登录用户名',
-    password_hash CHAR(64) NOT NULL COMMENT 'SHA256+HMAC 加密，PBKDF2 算法迭代 10000 次（salt=${salt}）',
-    salt CHAR(64) NOT NULL COMMENT 'CSPRNG 生成的 32 字节加密盐，每秒生成限制 100 次',
-    email VARCHAR(100) UNIQUE NOT NULL COMMENT '邮箱',
-	phone VARCHAR(20) UNIQUE NOT NULL COMMENT '手机号',
+    id SERIAL PRIMARY KEY,
+    avatar_url VARCHAR(255) DEFAULT '',
+    avatar_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash CHAR(64) NOT NULL,
+    salt CHAR(64) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '用户表'
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP DEFAULT NULL
+);
 
-CREATE TABLE block(
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    hash VARCHAR(64) NOT NULL COMMENT '区块哈希值',
-    pre_hash VARCHAR(64) NOT NULL COMMENT '前一个区块哈希值',
-    timestamp BIGINT NOT NULL COMMENT '时间戳',
-    data TEXT NOT NULL COMMENT '区块数据',
-    nonce INTEGER NOT NULL COMMENT '随机数，用于调整区块哈希以满足难度目标',
-    miner_id INTEGER NOT NULL COMMENT '挖矿者 ID',
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COMMENT ON TABLE user IS '用户表';
+COMMENT ON COLUMN user.avatar_url IS 'CDN 相对路径格式: /avatars/{user_id}_{timestamp}.jpg';
+COMMENT ON COLUMN user.avatar_updated_at IS '最后更新时间，用于客户端缓存刷新';
+COMMENT ON COLUMN user.username IS '登录用户名';
+COMMENT ON COLUMN user.password_hash IS 'SHA256+HMAC 加密，PBKDF2 算法迭代 10000 次（salt=${salt}）';
+COMMENT ON COLUMN user.salt IS 'CSPRNG 生成的 32 字节加密盐，每秒生成限制 100 次';
+COMMENT ON COLUMN user.email IS '邮箱';
+COMMENT ON COLUMN user.phone IS '手机号';
+COMMENT ON COLUMN user.created_at IS '创建时间';
+COMMENT ON COLUMN user.updated_at IS '更新时间';
+COMMENT ON COLUMN user.deleted_at IS '注销用户，逻辑删除，非空为已删除';
 
-CREATE TABLE checkout (
-    id INTEGER PRIMARY AUTO_INCREMENT,
-    book_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL
-) DEFAULT CHARSET=utf8mb4 COMMENT '借阅表';
+CREATE TABLE download (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    book_id INTEGER NOT NULL
+);
+
+COMMENT ON TABLE download IS '下载记录表';
+
+CREATE TABLE borrow (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    book_id INTEGER NOT NULL
+);
+
+COMMENT ON TABLE borrow IS '借阅记录表';
 
 CREATE TABLE favorite (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    book_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    deleted_at TIMESTAMP DEFAULT NULL COMMENT '删除时间，NULL 表示未删除'
-) DEFAULT CHARSET=utf8mb4 COMMENT '收藏表'
+    id BIGSERIAL PRIMARY KEY,
+    user_id INTEGER,
+    book_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP DEFAULT NULL
+);
+
+COMMENT ON TABLE favorite IS '收藏表';
+COMMENT ON COLUMN favorite.created_at IS '创建时间';
+COMMENT ON COLUMN favorite.deleted_at IS '删除时间，NULL 表示未删除';
 
 CREATE TABLE comment (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    book_id INT,
-    parent_id BIGINT DEFAULT NULL COMMENT '父评论 ID',
-    content TEXT NOT NULL COMMENT '评论内容',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    deleted_at TIMESTAMP DEFAULT NULL COMMENT '删除时间，NULL 表示未删除'
-) DEFAULT CHARSET=utf8mb4 COMMENT '评论表'
+    id BIGSERIAL PRIMARY KEY,
+    user_id INTEGER,
+    book_id INTEGER,
+    parent_id BIGINT DEFAULT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP DEFAULT NULL
+);
 
--- 评论表外键
-ALTER TABLE comments
-    ADD CONSTRAINT fk_comments_user_id    -- 用户外键
-    FOREIGN KEY (user_id) 
-    REFERENCES user(id) 
-    ON DELETE SET NULL 
-    ON UPDATE CASCADE,
-
-    ADD CONSTRAINT fk_comments_book_id    -- 图书外键
-    FOREIGN KEY (book_id) 
-    REFERENCES book(id) 
-    ON DELETE CASCADE 
-    ON UPDATE CASCADE,
-
-    ADD CONSTRAINT fk_comments_parent_id  -- 父评论自关联外键
-    FOREIGN KEY (parent_id) 
-    REFERENCES comment(id) 
-    ON DELETE CASCADE 
-    ON UPDATE CASCADE;
-
--- 收藏表外键
-ALTER TABLE favorites
-    ADD CONSTRAINT fk_favorites_user_id   -- 用户外键
-    FOREIGN KEY (user_id) 
-    REFERENCES user(id) 
-    ON DELETE CASCADE 
-    ON UPDATE CASCADE,
-
-    ADD CONSTRAINT fk_favorites_book_id   -- 图书外键
-    FOREIGN KEY (book_id) 
-    REFERENCES book(id) 
-    ON DELETE CASCADE 
-    ON UPDATE CASCADE;
+COMMENT ON TABLE comment IS '评论表';
+COMMENT ON COLUMN comment.parent_id IS '父评论 ID';
+COMMENT ON COLUMN comment.content IS '评论内容';
+COMMENT ON COLUMN comment.created_at IS '创建时间';
+COMMENT ON COLUMN comment.deleted_at IS '删除时间，NULL 表示未删除';
