@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var newBook = Book{Isbn: "9787544244398", Title: "All about Lily Chou-chou", Author: "Shunji Iwai"}
+var newBook = Book{ISBN: "9787544244398", Title: "All about Lily Chou-chou", Author: "Shunji Iwai"}
 
 // 数据库初始化相关函数
 func InitDB() (*gorm.DB, error) {
