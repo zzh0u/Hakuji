@@ -6,21 +6,21 @@ import (
 
 // Book 图书表模型
 type Book struct {
-	ID             int       `db:"id" json:"id"`
-	ISBN           string    `db:"isbn" json:"isbn"`
-	Title          string    `db:"title" json:"title"`
-	Author         string    `db:"author" json:"author"`
-	CoverURL       string    `db:"cover_url" json:"cover_url"`
-	Hash           string    `db:"hash" json:"hash"`
-	PreHash        string    `db:"pre_hash" json:"pre_hash"`
-	Publisher      string    `db:"publisher" json:"publisher"`
-	PublishedDate  time.Time `db:"published_date" json:"published_date"`
-	Category       string    `db:"category" json:"category"`
-	ContentSummary string    `db:"content_summary" json:"content_summary"`
-	Rating         float32   `db:"rating" json:"rating"`
-	DownloadCount  int       `db:"download_count" json:"download_count"`
-	CreatedAt      time.Time `db:"created_at" json:"created_at"`
-	DeletedAt      *time.Time `db:"deleted_at" json:"deleted_at"` // 新增逻辑删除字段
+	ID             int        `db:"id" json:"id"`
+	ISBN           string     `db:"isbn" json:"isbn"`
+	Title          string     `db:"title" json:"title"`
+	Author         string     `db:"author" json:"author"`
+	CoverURL       string     `db:"cover_url" json:"cover_url"`
+	Hash           string     `db:"hash" json:"hash"`
+	PreHash        string     `db:"pre_hash" json:"pre_hash"`
+	Publisher      string     `db:"publisher" json:"publisher"`
+	PublishedDate  time.Time  `db:"published_date" json:"published_date"`
+	Category       string     `db:"category" json:"category"`
+	ContentSummary string     `db:"content_summary" json:"content_summary"`
+	Rating         float32    `db:"rating" json:"rating"`
+	DownloadCount  int        `db:"download_count" json:"download_count"`
+	CreatedAt      time.Time  `db:"created_at" json:"created_at"`
+	DeletedAt      *time.Time `db:"deleted_at" json:"deleted_at"`
 }
 
 // User 用户表模型
@@ -35,7 +35,7 @@ type User struct {
 	Phone           string     `db:"phone" json:"phone"`
 	CreatedAt       time.Time  `db:"created_at" json:"created_at"`
 	UpdatedAt       time.Time  `db:"updated_at" json:"updated_at"`
-	DeletedAt       *time.Time `db:"deleted_at" json:"deleted_at"` // 新增逻辑删除字段
+	DeletedAt       *time.Time `db:"deleted_at" json:"deleted_at"`
 }
 
 // Download 下载记录表

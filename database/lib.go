@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -9,11 +10,6 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
-
-// var newBook = []Book{
-// 	{ISBN: "9787544244398", Title: "All about Lily Chou-chou", Author: "Shunji Iwai"},
-// 	{},
-// }
 
 // 数据库初始化相关函数
 func InitDB() (*gorm.DB, error) {
@@ -31,39 +27,93 @@ func InitDB() (*gorm.DB, error) {
 		Logger:                                   newLogger,
 		DisableForeignKeyConstraintWhenMigrating: true,
 	})
+
+	cleanData(db)
+
 	return db, err
 }
 
-// func AutoMigrateModels(db *gorm.DB) error {
-// 	// 自动迁移所有模型（包含被注释的AutoMigrate功能）
-// }
+func AutoMigrateModels(db *gorm.DB) error {
+	return db.AutoMigrate(&Book{}, &User{}, &Favorite{}, &Comment{}, &Download{}, &Borrow{})
+}
 
-// func CreateBook(db *gorm.DB, book *Book) error {
-// 	// 创建单个书籍记录
-// }
+// 有没有比较通用一些的检索方法，譬如传入一个 book *Book，然后返回所有满足条件的书
+// 但怎么知道是通过 book 中的哪一个参数搜索
 
-// func BatchCreateBooks(db *gorm.DB, books []Book) (int64, error) {
-// 	// 批量创建书籍
-// }
+// 通过 book *Book 请求后，怎么对 book 进行修改
 
-// func GetBookByISBN(db *gorm.DB, isbn string) (*Book, error) {
-// 	// 通过ISBN查询书籍
-// }
+// CRUD operations
+// get all books
+func GetAllBooks(db *gorm.DB) ([]Book, error) {
+	var books []Book
+	result := db.Find(&books)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return books, nil
+}
 
-// func UpdateBook(db *gorm.DB, book *Book) error {
-// 	// 更新书籍信息
-// }
+// create a new book
+func CreateBook(db *gorm.DB, book *Book) error {
+	result := db.Create(book)
+	fmt.Println(result.RowsAffected)
+	return result.Error
+}
 
-// func DeleteBook(db *gorm.DB, id uint) error {
-// 	// 根据ID删除书籍
-// }
+// create books in batches
+func BatchCreateBooks(db *gorm.DB, books []Book) error {
+	result := db.CreateInBatches(books, 40)
+	return result.Error
+}
 
-// // 事务处理
-// func WithTransaction(db *gorm.DB, txFunc func(*gorm.DB) error) error {
-// 	// 事务封装处理
-// }
+// search book via ISBN
+func GetBookByISBN(db *gorm.DB, isbn string) (*Book, error) {
+	var book Book
+	result := db.Where("isbn = ?", isbn).Find(&book)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &book, nil
+}
 
-// // 错误处理
-// func IsRecordNotFoundError(err error) bool {
-// 	// 判断是否为"记录未找到"错误
-// }
+// update book info
+func UpdateBook(db *gorm.DB, book *Book) error {
+	// 更新书籍信息
+	result := db.Save(book)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+// delete book via id
+func DeleteBook(db *gorm.DB, id uint) error {
+	now := time.Now()
+	result := db.Model(&Book{}).Where("id = ", id).Update("deleted_at", now)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+// 测试时使用，保证每次启动服务都不会有上次的数据
+func cleanData(db *gorm.DB) error {
+	models := []interface{}{
+		&Comment{},
+		&Favorite{},
+		&Download{},
+		&Borrow{},
+		&Book{},
+		&User{},
+	}
+
+	return db.Transaction(func(tx *gorm.DB) error {
+		for _, model := range models {
+			err := tx.Unscoped().Where("1 = 1").Delete(model).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
