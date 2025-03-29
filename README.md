@@ -1,14 +1,14 @@
-> 启发于[这篇博客](https://shusunny.github.io/sunnyblog/blockchain/simple-blockchain.html)
-
 # 介绍
 
 这个项目是一个电子图书馆项目。技术栈可见[tasklist](#tasklist)。
 
-# 使用方法
+## 使用方法
 
-Todo
+## 开发环境
 
-# TaskList
+## 项目结构
+
+## TaskList
 
 1. [x] 后端：Go Gin
     1. [ ] 区块链
