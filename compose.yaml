@@ -21,11 +21,7 @@ services:
     volumes:
       - ./storage/minio:/data  # 挂载数据目录（持久化存储）
     environment:
-      - MINIO_ROOT_USER=admin      # 管理员用户名
-      - MINIO_ROOT_PASSWORD=password  # 管理员密码（至少8位）
+      - MINIO_ROOT_USER=zzh0u      # 管理员用户名
+      - MINIO_ROOT_PASSWORD=123456789  # 管理员密码（至少8位）
     command: server /data --console-address ":9001"  # 启动命令
     restart: unless-stopped  # 容器退出时自动重启
-
-volumes:
-  postgres_data:  # 数据持久化卷
-

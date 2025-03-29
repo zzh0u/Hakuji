@@ -40,8 +40,6 @@ func AutoMigrateModels(db *gorm.DB) error {
 // 有没有比较通用一些的检索方法，譬如传入一个 book *Book，然后返回所有满足条件的书
 // 但怎么知道是通过 book 中的哪一个参数搜索
 
-// 通过 book *Book 请求后，怎么对 book 进行修改
-
 // CRUD operations
 // get all books
 func GetAllBooks(db *gorm.DB) ([]Book, error) {
