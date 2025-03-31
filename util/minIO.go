@@ -3,8 +3,10 @@ package util
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -79,12 +81,10 @@ func (cfg *MinIOConfig) DownloadFile(objectName string, localFilePath string) er
 		return fmt.Errorf("MinIO客户端未初始化")
 	}
 
-	// 创建本地文件目录
 	if err := os.MkdirAll(filepath.Dir(localFilePath), 0755); err != nil {
 		return fmt.Errorf("创建本地目录失败: %w", err)
 	}
 
-	// 执行下载操作
 	err := cfg.Client.FGetObject(
 		context.Background(),
 		cfg.BucketName,           // 从配置中获取存储桶名
@@ -95,6 +95,73 @@ func (cfg *MinIOConfig) DownloadFile(objectName string, localFilePath string) er
 
 	if err != nil {
 		return fmt.Errorf("文件下载失败: %w", err)
+	}
+	return nil
+}
+
+func (cfg *MinIOConfig) UploadFolder(localPath string) error {
+	if cfg.Client == nil {
+		return fmt.Errorf("MinIO客户端未初始化")
+	}
+
+	return filepath.WalkDir(localPath, func(path string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() {
+			return err // 跳过目录和错误文件
+		}
+
+		// 生成相对路径作为对象名称
+		// 重要！！！应提取上传路径的最后一部分
+		relPath, _ := filepath.Rel(localPath, path)
+		objectName := filepath.Join("./", relPath)
+
+		// 上传单个文件
+		_, err = cfg.Client.FPutObject(
+			context.Background(),
+			cfg.BucketName,
+			objectName,
+			path,
+			minio.PutObjectOptions{},
+		)
+		return err
+	})
+}
+
+func (cfg *MinIOConfig) DownloadFolder(minioPrefix string, localPath string) error {
+	if cfg.Client == nil {
+		return fmt.Errorf("MinIO客户端未初始化")
+	}
+
+	if err := os.MkdirAll(localPath, 0755); err != nil {
+		return err
+	}
+
+	// 递归列出所有对象
+	objCh := cfg.Client.ListObjects(context.Background(), cfg.BucketName, minio.ListObjectsOptions{
+		Prefix:    minioPrefix,
+		Recursive: true,
+	})
+
+	for obj := range objCh {
+		if obj.Err != nil {
+			continue
+		}
+
+		relPath := strings.TrimPrefix(obj.Key, minioPrefix)
+		localFilePath := filepath.Join(localPath, relPath)
+
+		if err := os.MkdirAll(filepath.Dir(localFilePath), 0755); err != nil {
+			return err
+		}
+
+		if err := cfg.Client.FGetObject(
+			context.Background(),
+			cfg.BucketName,
+			obj.Key,
+			localFilePath,
+			minio.GetObjectOptions{},
+		); err != nil {
+			return err
+		}
 	}
 	return nil
 }
