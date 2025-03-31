@@ -5,7 +5,6 @@ go 1.23.0
 toolchain go1.23.2
 
 require (
-	github.com/gorilla/mux v1.8.1
 	github.com/minio/minio-go/v7 v7.0.89
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12

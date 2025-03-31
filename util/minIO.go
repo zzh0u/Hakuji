@@ -76,7 +76,7 @@ func (cfg *MinIOConfig) UploadFile(filePath string, objectName ...string) error 
 	return nil
 }
 
-func (cfg *MinIOConfig) DownloadFile(objectName string, localFilePath string) error {
+func (cfg *MinIOConfig) DownloadFile(objectName, localFilePath string) error {
 	if cfg.Client == nil {
 		return fmt.Errorf("MinIO客户端未初始化")
 	}
@@ -99,22 +99,19 @@ func (cfg *MinIOConfig) DownloadFile(objectName string, localFilePath string) er
 	return nil
 }
 
-func (cfg *MinIOConfig) UploadFolder(localPath string) error {
+func (cfg *MinIOConfig) UploadFolder(localPath, minioPrefix string) error {
 	if cfg.Client == nil {
 		return fmt.Errorf("MinIO客户端未初始化")
 	}
 
 	return filepath.WalkDir(localPath, func(path string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() {
-			return err // 跳过目录和错误文件
+			return err
 		}
 
-		// 生成相对路径作为对象名称
-		// 重要！！！应提取上传路径的最后一部分
 		relPath, _ := filepath.Rel(localPath, path)
-		objectName := filepath.Join("./", relPath)
+		objectName := filepath.Join(minioPrefix, relPath) // 正确的路径拼接
 
-		// 上传单个文件
 		_, err = cfg.Client.FPutObject(
 			context.Background(),
 			cfg.BucketName,
@@ -126,7 +123,7 @@ func (cfg *MinIOConfig) UploadFolder(localPath string) error {
 	})
 }
 
-func (cfg *MinIOConfig) DownloadFolder(minioPrefix string, localPath string) error {
+func (cfg *MinIOConfig) DownloadFolder(minioPrefix, localPath string) error {
 	if cfg.Client == nil {
 		return fmt.Errorf("MinIO客户端未初始化")
 	}
