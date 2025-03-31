@@ -1,105 +1,53 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/json"
-	"fmt"
-	"io"
 	"log"
-	"net/http"
+	"path/filepath"
+	"sync"
 
-	"hakuji/block"
-
-	"github.com/gorilla/mux"
+	"hakuji/util"
 )
 
-var BlockChain *block.Blockchain
-
-// Handler 将区块链作为 json 字符串写回浏览器
-func getBlockchain(w http.ResponseWriter, r *http.Request) {
-	// prefix:""	每行前缀
-	// indent:" "	缩进字符
-	jbytes, err := json.MarshalIndent(BlockChain.Blocks, "", " ")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(err)
-		return
-	}
-	w.Write(jbytes)
-}
-
-// Handler 根据发送的信息添加一个新区块，借阅记录
-func writeBlock(w http.ResponseWriter, r *http.Request) {
-	var checkoutItem block.BookCheckout
-	if err := json.NewDecoder(r.Body).Decode(&checkoutItem); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("could not write Block: %v", err)
-		return
-	}
-	BlockChain.AddBlock(checkoutItem)
-	resp, err := json.MarshalIndent(checkoutItem, "", " ")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("could not marshal payload: %v", err)
-		w.Write([]byte("could not write block"))
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(resp)
-}
-
-// 创建新的 Book 数据
-func newBook(w http.ResponseWriter, r *http.Request) {
-	var book block.Book
-	if err := json.NewDecoder(r.Body).Decode(&book); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("could not create new book")
-		return
-	}
-
-	// 使用生成 ID 作为区块添加
-	// 创建 ID 连接 ISBN 和发售日
-	h := md5.New()
-	io.WriteString(h, book.ISBN+book.PublishDate)
-	book.ID = fmt.Sprintf("%x", h.Sum(nil))
-	fmt.Println(book)
-
-	// send back payload
-	resp, err := json.MarshalIndent(book, "", " ")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("could not marshal payload:%v", err)
-		w.Write([]byte("could not save book date"))
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(resp)
-}
-
 func main() {
-	BlockChain = block.NewBlockchain()
+	cfg := &util.MinIOConfig{
+		Endpoint:    "localhost:9000",                           // MinIO 服务地址
+		AccessKeyID: "rWi02y2gSXQQ2MDDLr3d",                     // compose.yaml 中设置的用户名
+		SecretKey:   "6r5OEp5HcOI1vskdpB2qTXp2RPiuqf43Q35GEACv", // compose.yaml 中设置的密码
+		UseSSL:      false,                                      // 本地开发禁用SSL
+		BucketName:  "bucket",                                   // 对应创建的存储桶
+	}
 
-	r := mux.NewRouter()
-	r.HandleFunc("/getBook", getBlockchain).Methods("GET")
-	r.HandleFunc("/borrowBook", writeBlock).Methods("POST")
-	r.HandleFunc("/newBook", newBook).Methods("POST")
+	_, err := util.NewMinIOClient(cfg)
+	if err != nil {
+		log.Fatalf("Init MinIO client failed: %v", err)
+	}
 
+	var wg sync.WaitGroup
+
+	wg.Add(1)
 	go func() {
-		for _, block := range BlockChain.Blocks {
-			if block == nil {
-				fmt.Println("Error: Encountered a nil block in the chain.")
-				continue
-			}
-			fmt.Printf("Prev.hash:%x\n", block.PrevHash)
-			bytes, _ := json.MarshalIndent(block.Data, "", " ")
-			fmt.Printf("Data:%v\n", string(bytes))
-			fmt.Printf("Hash:%v\n", block.Hash)
-			fmt.Println()
+		defer wg.Done()
+
+		filePath := filepath.Join("/Users/zhou/Downloads", "3.epub")
+		if err := cfg.UploadFolder(filePath); err != nil {
+			log.Printf("File upload failed: %v", err)
+			// log.Fatalf("File upload failed: %v", err) // 避免静态终止？？？
+			return
 		}
+		log.Printf("File successfully upload to bucket: %s", cfg.BucketName)
 	}()
 
-	log.Println("Listening on port 3000")
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		// if err = cfg.DownloadFile("filename.format", "dir/to/your/path/filename.format"); err != nil {
+		if err = cfg.DownloadFile("产品需求文档写作指南.pdf", "/Users/zhou/Downloads/产品需求文档写作指南.pdf"); err != nil {
+			log.Fatalf("File download failed: %v", err)
+			return
+		}
+		// log.Printf("File download successfully to local: %s", "dir/to/your/path/")
+		log.Printf("File download successfully to local: %s", "/Users/zhou/Downloads/")
+	}()
 
-	log.Fatal(http.ListenAndServe(":3000", r))
-
+	wg.Wait()
 }
