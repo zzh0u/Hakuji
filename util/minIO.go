@@ -18,14 +18,13 @@ import (
 )
 
 type MinIOConfig struct {
-	Client *minio.Client // 导出字段以便外部访问
+	Client *minio.Client `yaml:"-"` // 导出字段以便外部访问
 
-	Endpoint    string
-	AccessKeyID string
-	SecretKey   string
-	UseSSL      bool
-
-	BucketName string
+	Endpoint    string `yaml:"endpoint"`
+	AccessKeyID string `yaml:"accessKeyID"`
+	SecretKey   string `yaml:"secretKey"`
+	UseSSL      bool   `yaml:"useSSL"`
+	BucketName  string `yaml:"bucketName"`
 }
 
 // NewMinIOClient 创建并返回配置好的MinIO客户端
