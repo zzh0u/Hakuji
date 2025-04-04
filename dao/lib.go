@@ -13,7 +13,7 @@ import (
 
 // 数据库初始化相关函数
 func InitDB() (*gorm.DB, error) {
-	dsn := "host=localhost user=zzh0u password=123456 dbname=postgresql port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=localhost user=zzh0u password=123456 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
@@ -28,7 +28,7 @@ func InitDB() (*gorm.DB, error) {
 		DisableForeignKeyConstraintWhenMigrating: true,
 	})
 
-	cleanData(db)
+	// cleanData(db)
 
 	return db, err
 }
