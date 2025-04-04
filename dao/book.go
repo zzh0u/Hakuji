@@ -74,6 +74,7 @@ func GetBookByISBN(db *gorm.DB, isbn string) (*Book, error) {
 	return &book, nil
 }
 
+
 // update book info
 func UpdateBook(db *gorm.DB, book *Book) error {
 	// 更新书籍信息
