@@ -41,17 +41,19 @@ func main() {
 		log.Printf("File successfully upload to bucket: %s", cfg.BucketName)
 	}()
 
+
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		if err = cfg.DownloadFile("filename.format", "dir/to/your/path/filename.format"); err != nil {
-		// if err = cfg.DownloadFile("产品需求文档写作指南.pdf", "/Users/zhou/Downloads/down/产品需求文档写作指南.pdf"); err != nil {
+			// if err = cfg.DownloadFile("产品需求文档写作指南.pdf", "/Users/zhou/Downloads/down/产品需求文档写作指南.pdf"); err != nil {
 			log.Fatalf("File download failed: %v", err)
 			return
 		}
 		log.Printf("File download successfully to local: %s", "dir/to/your/path/")
 		// log.Printf("File download successfully to local: %s", "/Users/zhou/Downloads/")
 	}()
+
 
 	wg.Add(1)
 	go func() {
@@ -67,7 +69,7 @@ func main() {
 		log.Printf("Folder successfully upload to bucket: %s", cfg.BucketName)
 	}()
 
-
+	
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
