@@ -1,6 +1,3 @@
-# app:
-#   dbPath: "D:/data/pebble/pebbleDb"
-#   uploadPath: "D:/photo"
 minio:
   endpoint: "127.0.0.1:9000"
   accessKeyID: "rWi02y2gSXQQ2MDDLr3d"
