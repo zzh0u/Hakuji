@@ -1,40 +1,64 @@
 <script setup>
+import '@fortawesome/fontawesome-free/css/all.min.css'
+import { ref } from 'vue'
+import UserPopup from './UserPopup.vue'
+
+const isLoggedIn = ref(false)
+const showUserPopup = ref(false)
+const showMenu = ref(false)
+
 const openSearchLine = () => {
   // Todo:搜索功能实现
   console.log('打开搜索')
 }
+
+const toggleUserPopup = () => {
+  showUserPopup.value = !showUserPopup.value
+}
+
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value
+}
 </script>
 
 <template>
-  <header class="header container">
+  <header class="header-container">
     <div class="logo">
       <a href="/">
         <img src="/favicon.ico" />
         <h1>hakuji library</h1>
       </a>
     </div>
-    <nav class="nav">
-      <button class="naviSearch" @click="openSearchLine()">search(换成搜索 logo)</button>
 
-      <div @click="openHeadUser()" class="user-button">
-        <!-- 换成默认用户头像 -->
-        <img src="/favicon.ico" alt="logo" />
-        <span>用户</span>
+    <!-- 顶部右侧导航栏 -->
+    <nav class="nav">
+      <!-- 搜索按钮 -->
+      <button class="naviSearch" @click="openSearchLine()">
+        <i class="fas fa-search"></i>
+      </button>
+
+      <!-- 用户按钮 -->
+      <div class="user-button" @click="toggleUserPopup">
+        <i class="fas fa-user-circle"></i>
       </div>
 
-      <div>
-        <!-- 选项菜单 -->
-        <img src="/favicon.ico" alt="logo" />
-        <span>选项</span>
+      <!-- 用户信息悬浮窗组件 -->
+      <UserPopup
+        :is-logged-in="isLoggedIn"
+        :show-user-popup="showUserPopup"
+        @close="toggleUserPopup"
+      />
+
+      <!-- 菜单按钮 -->
+      <div class="menu-button" @click="toggleMenu">
+        <i class="fas fa-bars"></i>
       </div>
     </nav>
-
-    <!-- 用户信息悬浮窗 -->
   </header>
 </template>
 
 <style lang="scss" scoped>
-.header {
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,23 +76,13 @@ const openSearchLine = () => {
       gap: 8px;
       text-decoration: none;
     }
-
-    img {
-      max-height: 48px;
-    }
-
-    h1 {
-      margin: 0;
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 800;
-    }
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 2rem;
+    padding-right: 2rem;
     height: 64px;
     margin: 0 10px 0;
 
@@ -83,10 +97,32 @@ const openSearchLine = () => {
 }
 
 .naviSearch {
-  padding: 8px, 12px;
-  background: #f5f5f5;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+  padding: 8px 12px;
+  background: none;
+  border: none;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.fas {
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.user-button,
+.menu-button {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.6;
+  }
 }
 </style>

@@ -7,7 +7,7 @@
     <n-input
       v-model:value="searchQuery"
       type="text"
-      placeholder="搜索..."
+      placeholder="按书名、作者、ISBN、出版社等搜索..."
       clearable
       @keyup.enter="handleSearch"
       style="width: 70rem"
