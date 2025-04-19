@@ -9,26 +9,27 @@
   </n-config-provider>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { NConfigProvider } from 'naive-ui'
 import AppHeader from '../components/AppHeader.vue'
 import BookCard from '../components/BookCard.vue'
 import SearchBox from '../components/SearchBox.vue'
 // import LogButton from '../components/LogButton.vue'
 
 const themeOverrides = {
-
   common: {
-    primaryColor: '#000000',
-  },
-  Button: {
-    textColor: '#999999',
-  },
-  Select: {
-    peers: {
-      InternalSelection: {
-        textColor: '#FF0000',
-      },
-    },
+    primaryColor: '#1e90ff',
+    primaryColorHover: '#4da6ff',
+    primaryColorPressed: '#0077e6',
+    primaryColorSuppl: '#4da6ff',
+
+    infoColor: '#1e90ff',
+    infoColorHover: '#4da6ff',
+    infoColorPressed: '#0077e6',
+
+    successColor: '#52c41a',
+    warningColor: '#faad14',
+    errorColor: '#f5222d',
   },
 }
 </script>
