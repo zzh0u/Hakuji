@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .search-box {
   display: flex;
   width: 100%;
@@ -51,6 +51,11 @@ export default {
   border-radius: 5px 0 0 5px;
   justify-content: center;
   align-items: center;
+
+  .n-input .n-input__input-el {
+    height: 28px;
+    line-height: 28px;
+  }
 }
 
 .search-input {
