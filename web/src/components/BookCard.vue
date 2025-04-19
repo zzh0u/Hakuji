@@ -1,7 +1,6 @@
 <template>
   <div class="book-list">
     <div class="book-card" v-for="bookItem in recentBooks" :key="bookItem.id">
-      <!-- 冒号是什么意思 -->
       <img :src="bookItem.cover" alt="书籍封面" class="cover" />
       <!-- <div class="content">
         <h3 class="title">{{ bookItem.title }}</h3>
@@ -17,13 +16,6 @@ import { ref } from 'vue'
 import booksData from '../lib.json'
 
 const recentBooks = ref(booksData)
-
-defineProps({
-  book: {
-    type: Object,
-    required: true,
-  },
-})
 </script>
 
 <style scoped>

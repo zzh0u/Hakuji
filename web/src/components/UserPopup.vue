@@ -111,10 +111,6 @@ const closePopup = () => {
     color: white;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-
-    &:hover {
-      background: darken(#1e90ff, 10%);
-    }
   }
 }
 
@@ -126,9 +122,5 @@ const closePopup = () => {
   color: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background: darken(#1e90ff, 10%);
-  }
 }
 </style>
