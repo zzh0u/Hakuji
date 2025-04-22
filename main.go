@@ -1,9 +1,8 @@
 package main
 
-import (
-	"hakuji/util"
-)
+import "hakuji/util"
 
 func main() {
-	util.Service()
+	r := util.Service()
+	r.Run(":8080") // 在8080端口启动服务
 }
