@@ -8,14 +8,35 @@
         <p class="description">{{ bookItem.description }}</p>
       </div> -->
     </div>
+    <div style="margin-top: 2rem;">
+      <input type="file" @change="onFileChange" />
+      <button @click="handleUpload" :disabled="!selectedFile">上传书籍</button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import booksData from '../lib.json'
+import { uploadBook } from '../api/api'
 
 const recentBooks = ref(booksData)
+const selectedFile = ref(null)
+
+function onFileChange(e) {
+  selectedFile.value = e.target.files[0]
+}
+
+async function handleUpload() {
+  if (!selectedFile.value) return
+  try {
+    const res = await uploadBook(selectedFile.value)
+    alert(res.data.message || '上传成功')
+    selectedFile.value = null
+  } catch (err) {
+    alert(err.response?.data?.error || '上传失败')
+  }
+}
 </script>
 
 <style scoped>
