@@ -1,8 +1,0 @@
-# app:
-#   dbPath: "D:/data/pebble/pebbleDb"
-#   uploadPath: "D:/photo"
-minio:
-  endpoint: "127.0.0.1:9000"
-  accessKeyID: "rWi02y2gSXQQ2MDDLr3d"
-  secretAccessKey: "6r5OEp5HcOI1vskdpB2qTXp2RPiuqf43Q35GEACv"
-  bucketName: "bucket"

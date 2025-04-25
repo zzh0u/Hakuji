@@ -20,17 +20,19 @@ import (
 type MinIOConfig struct {
 	Client *minio.Client `yaml:"-"` // 导出字段以便外部访问
 
-	Endpoint    string `yaml:"endpoint"`
-	AccessKeyID string `yaml:"accessKeyID"`
-	SecretKey   string `yaml:"secretKey"`
-	UseSSL      bool   `yaml:"useSSL"`
-	BucketName  string `yaml:"bucketName"`
+	Endpoint        string `yaml:"endpoint"`
+	AccessKeyID     string `yaml:"accessKeyID"`
+	SecretAccessKey string `yaml:"secretAccessKey"`
+	UseSSL          bool   `yaml:"useSSL"`
+	BucketName      string `yaml:"bucketName"`
 }
 
 // NewMinIOClient 创建并返回配置好的MinIO客户端
 func NewMinIOClient(cfg *MinIOConfig) (*minio.Client, error) {
+	fmt.Println("开始初始化MinIO客户端")
+	fmt.Printf("MinIO配置: %+v\n", cfg)
 	client, err := minio.New(cfg.Endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(cfg.AccessKeyID, cfg.SecretKey, ""),
+		Creds:  credentials.NewStaticV4(cfg.AccessKeyID, cfg.SecretAccessKey, ""),
 		Secure: cfg.UseSSL,
 	})
 	if err != nil {
@@ -49,6 +51,7 @@ func NewMinIOClient(cfg *MinIOConfig) (*minio.Client, error) {
 	}
 
 	cfg.Client = client
+	fmt.Println("MinIO客户端初始化成功")
 	return client, nil
 }
 

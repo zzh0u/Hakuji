@@ -27,8 +27,8 @@ func Operation() {
 	go func() {
 		defer wg.Done()
 
-		filePath := filepath.Join("/Users/zhou/Downloads", "产品需求文档写作指南.pdf")
-		if err := cfg.UploadFile(filePath); err != nil {
+		filePath := filepath.Join("/Users/zhou/Downloads", "router.go")
+		if err = cfg.UploadFile(filePath); err != nil {
 			log.Printf("File upload failed: %v", err)
 			// log.Fatalf("File upload failed: %v", err) // 避免静态终止？？？
 			return
@@ -48,32 +48,32 @@ func Operation() {
 		// log.Printf("File download successfully to local: %s", "/Users/zhou/Downloads/")
 	}()
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
 
-		filePath := filepath.Join("/Users/zhou/Downloads", "3.epub")
-		minioPrefix := "3.epub"
-		if err := cfg.UploadFolder(filePath, minioPrefix); err != nil {
-			log.Printf("File upload failed: %v", err)
-			// log.Fatalf("File upload failed: %v", err) // 避免静态终止？？？
-			return
-		}
-		log.Printf("Folder successfully upload to bucket: %s", cfg.BucketName)
-	}()
+	// 	filePath := filepath.Join("/Users/zhou/Downloads", "3.epub")
+	// 	minioPrefix := "3.epub"
+	// 	if err := cfg.UploadFolder(filePath, minioPrefix); err != nil {
+	// 		log.Printf("File upload failed: %v", err)
+	// 		// log.Fatalf("File upload failed: %v", err) // 避免静态终止？？？
+	// 		return
+	// 	}
+	// 	log.Printf("Folder successfully upload to bucket: %s", cfg.BucketName)
+	// }()
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		localPath := "/Users/zhou/Downloads/down/"
-		minioPath := "3.epub"
-		filepath := localPath + minioPath
-		if err := cfg.DownloadFolder(minioPath, filepath); err != nil {
-			log.Fatalf("File download failed: %v", err)
-			return
-		}
-		log.Printf("Folder download successfully to local: %s", filepath)
-	}()
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	localPath := "/Users/zhou/Downloads/down/"
+	// 	minioPath := "3.epub"
+	// 	filepath := localPath + minioPath
+	// 	if err := cfg.DownloadFolder(minioPath, filepath); err != nil {
+	// 		log.Fatalf("File download failed: %v", err)
+	// 		return
+	// 	}
+	// 	log.Printf("Folder download successfully to local: %s", filepath)
+	// }()
 
 	wg.Wait()
 }
