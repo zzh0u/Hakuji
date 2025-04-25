@@ -18,7 +18,5 @@ func LoadConfig(path string) (*MinIOConfig, error) {
 	if err := yaml.Unmarshal(data, &config); err != nil {
 		return nil, fmt.Errorf("解析YAML失败: %w", err)
 	}
-	fmt.Printf("data: %s\n", data)
-	fmt.Printf("config: %s\n", config)
 	return &config, nil
 }

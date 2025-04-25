@@ -11,6 +11,7 @@
 /*/tmp
 /.idea
 .DS_Stoe
+/config
 
 # 本地存储
 /storage
