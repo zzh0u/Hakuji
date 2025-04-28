@@ -1,6 +1,13 @@
 <template>
   <div class="book-list">
-    <div class="book-card" v-for="bookItem in recentBooks" :key="bookItem.id">
+    <!-- <div class="book-card" v-for="bookItem in recentBooks" :key="bookItem.id"> -->
+    <div
+      class="book-card"
+      v-for="bookItem in recentBooks"
+      :key="bookItem.id"
+      @click="goToDetail(bookItem.id)"
+      style="cursor: pointer"
+    >
       <img :src="bookItem.cover" alt="书籍封面" class="cover" />
       <!-- <div class="content">
         <h3 class="title">{{ bookItem.title }}</h3>
@@ -8,7 +15,7 @@
         <p class="description">{{ bookItem.description }}</p>
       </div> -->
     </div>
-    <div style="margin-top: 2rem;">
+    <div style="margin-top: 2rem">
       <input type="file" @change="onFileChange" />
       <button @click="handleUpload" :disabled="!selectedFile">上传书籍</button>
     </div>
@@ -19,12 +26,21 @@
 import { ref } from 'vue'
 import booksData from '../lib.json'
 import { uploadBook } from '../api/api'
+import { useRouter } from 'vue-router'
 
 const recentBooks = ref(booksData)
 const selectedFile = ref(null)
 
 function onFileChange(e) {
   selectedFile.value = e.target.files[0]
+}
+
+const router = useRouter()
+
+console.log(router)// 输出 undefined
+
+function goToDetail(id) {
+  router.push({ name: 'book-detail', params: { id } })
 }
 
 async function handleUpload() {

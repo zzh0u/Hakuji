@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
+      path: '/book/:id',
+      name: 'book-detail',
+      component: () => import('../views/BookDetail.vue'),
+    },
+    {
       path: '/callback',
       name: 'callback',
       component: CallbackView,
