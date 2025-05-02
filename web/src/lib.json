@@ -2,6 +2,7 @@
   {
     "id": 1,
     "cover": "/covers/docker简明教程.jpg",
+    "title": "Docker简明教程",
     "author": "James Turnbull",
     "category": "技术",
     "publisher": "人民邮电出版社",
@@ -11,6 +12,7 @@
   {
     "id": 2,
     "cover": "/covers/three-body.jpg",
+    "title": "三体全集",
     "author": "刘慈欣",
     "category": "科幻",
     "publisher": "重庆出版社",
@@ -20,6 +22,7 @@
   {
     "id": 3,
     "cover": "/covers/毛泽东选集.jpg",
+    "title": "毛泽东选集",
     "author": "毛泽东",
     "category": "政治",
     "publisher": "人民出版社",
@@ -29,6 +32,7 @@
   {
     "id": 4,
     "cover":"/covers/一个陌生女人的来信.jpeg",
+    "title":"一个陌生女人的来信",
     "author":"[奥地利] 斯蒂芬·茨威格",
     "category":"小说",
     "publisher":"长江文艺出版社",
@@ -38,6 +42,7 @@
   {
     "id": 5,
     "cover":"/covers/一九八四.jpeg",
+    "title":"1984",
     "author":"[英] 乔治·奥威尔",
     "category":"反乌托邦",
     "publisher":"江苏文艺出版社",
@@ -47,6 +52,7 @@
   {
     "id": 6,
     "cover":"/covers/万物有灵且美.jpg",
+    "title":"万物有灵且美",
     "author":"[英]吉米·哈利",
     "category":"小说",
     "publisher":"中国城市出版社",
@@ -56,6 +62,7 @@
   {
     "id": 7,
     "cover":"/covers/两京十五日.jpeg",
+    "title":"两京十五日",
     "author":"马伯庸",
     "category":"小说",
     "publisher":"湖南文艺出版社",
@@ -65,6 +72,7 @@
   {
     "id": 8,
     "cover":"/covers/以利为利.jpg",
+    "title":"以利为利",
     "author":"周飞舟",
     "category":"财政",
     "publisher":"上海三联书店",
@@ -74,6 +82,7 @@
   {
     "id": 9,
     "cover":"/covers/伊豆的舞女.jpeg",
+    "title":"伊豆的舞女",
     "author":"[日本] 川端康成",
     "category":"小说",
     "publisher":"广西师范大学出版社",
@@ -83,6 +92,7 @@
   {
     "id": 10,
     "cover":"/covers/你当像鸟飞向你的山.jpeg",
+    "title":"你当像鸟飞向你的山",
     "author":"[美] 塔拉·韦斯特弗",
     "category":"小说",
     "publisher":"南海出版公司",
