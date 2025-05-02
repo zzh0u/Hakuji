@@ -1,8 +1,9 @@
-import { createRouter } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import CallbackView from '../views/CallbackView.vue'
 // import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',

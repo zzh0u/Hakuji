@@ -37,8 +37,6 @@ function onFileChange(e) {
 
 const router = useRouter()
 
-console.log(router)// 输出 undefined
-
 function goToDetail(id) {
   router.push({ name: 'book-detail', params: { id } })
 }
