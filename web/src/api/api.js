@@ -11,10 +11,8 @@ export const getUser = (userId) => api.get(`/user/${userId}`)
 // 封装 POST 请求
 export const login = (username, password) => api.post('/login', { username, password })
 
-// 上传书籍文件
-export const uploadBook = (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
+// 上传书籍文件和元数据
+export const uploadBook = (formData) => {
   return api.post('/api/upload_book', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'

@@ -1,16 +1,18 @@
 <template>
-  <n-config-provider :theme-overrides="themeOverrides">
-    <div class="home-container">
-      <AppHeader />
-      <SearchBox />
-      <!-- <LogButton /> -->
-      <BookCard />
-    </div>
-  </n-config-provider>
+  <n-message-provider>
+    <n-config-provider :theme-overrides="themeOverrides">
+      <div class="home-container">
+        <AppHeader />
+        <SearchBox />
+        <!-- <LogButton /> -->
+        <BookCard />
+      </div>
+    </n-config-provider>
+  </n-message-provider>
 </template>
 
 <script setup>
-import { NConfigProvider } from 'naive-ui'
+import { NConfigProvider, NMessageProvider } from 'naive-ui'
 import AppHeader from '../components/AppHeader.vue'
 import BookCard from '../components/BookCard.vue'
 import SearchBox from '../components/SearchBox.vue'
@@ -32,6 +34,7 @@ const themeOverrides = {
     errorColor: '#f5222d',
   },
 }
+
 </script>
 
 <style scoped>
