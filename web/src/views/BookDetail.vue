@@ -17,6 +17,7 @@
       <p><strong>出版社：</strong>{{ book.publisher }}</p>
       <p><strong>ISBN：</strong>{{ book.isbn }}</p>
       <p><strong>简介：</strong>{{ book.description }}</p>
+      <button class="download-btn" @click="handleDownload">下载书籍</button>
     </div>
   </div>
   <div v-else>
@@ -30,6 +31,7 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import booksData from '../lib.json'
 import GoBackButton from '@/components/GoBackButton.vue'
+import { downloadBook } from '../api/api'
 
 const route = useRoute()
 const router = useRouter()
@@ -40,6 +42,15 @@ book.value = booksData.find((b) => b.id === bookId)
 
 function goBack() {
   router.back()
+}
+
+async function handleDownload() {
+  try {
+    const res = await downloadBook(book.value.title)
+    alert(res.data.message || '下载成功')
+  } catch (err) {
+    alert(err.response?.data?.error || '下载失败')
+  }
 }
 </script>
 
@@ -91,5 +102,21 @@ h2 {
 }
 p {
   margin: 0.5rem 0;
+}
+.download-btn {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.download-btn:hover {
+  background-color: #45a049;
 }
 </style>

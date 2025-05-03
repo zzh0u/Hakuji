@@ -1,3 +1,4 @@
+// Todo：新增数据库记录
 package util
 
 import (
@@ -44,5 +45,34 @@ func SetupRouter(r *gin.Engine) {
 			return
 		}
 		c.JSON(200, gin.H{"message": "文件上传成功"})
+	})
+
+	// 新增下载书籍API
+	r.GET("/api/download_book", func(c *gin.Context) {
+		bookName := c.Query("book_name")
+		if bookName == "" {
+			c.JSON(400, gin.H{"error": "缺少书籍名称参数"})
+			return
+		}
+
+		cfg, err := LoadConfig("config/settings.yaml")
+		if err != nil {
+			c.JSON(500, gin.H{"error": "配置加载失败"})
+			return
+		}
+
+		_, err = NewMinIOClient(cfg)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "MinIO初始化失败"})
+			return
+		}
+
+		localPath := "/Users/zhou/Downloads/" + bookName
+		if err := cfg.DownloadFile(bookName, localPath); err != nil {
+			c.JSON(500, gin.H{"error": "文件下载失败"})
+			return
+		}
+
+		c.JSON(200, gin.H{"message": "文件下载成功", "path": localPath})
 	})
 }

@@ -21,4 +21,11 @@ export const uploadBook = (file) => {
     }
   });
 }
+
+// 下载书籍文件
+export const downloadBook = (bookName) => {
+  return api.get('/api/download_book', {
+    params: { book_name: bookName }
+  });
+}
 export default api
