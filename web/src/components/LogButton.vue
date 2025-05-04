@@ -38,6 +38,5 @@ export default {
   <div>
     <button v-if="!isAuthenticated" @click="onClickSignIn" class="auth-button">登陆</button>
     <button v-else @click="onClickSignOut" class="auth-button">登出</button>
-    <p v-if="error">{{ error }}</p>
   </div>
 </template>

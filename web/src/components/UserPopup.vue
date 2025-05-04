@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+// import { ref } from 'vue'
 import LogButton from './LogButton.vue'
 
 const props = defineProps({
@@ -27,9 +27,7 @@ const closePopup = () => {
     </button>
 
     <div v-if="isLoggedIn" class="logged-in-content">
-      <div class="user-avatar">
-        <i class="fas fa-user-circle"></i>
-      </div>
+      <i class="fas fa-user-circle"></i>
       <div class="user-info">
         <h3>用户名</h3>
         <p>邮箱</p>
@@ -64,14 +62,11 @@ const closePopup = () => {
     position: absolute;
     top: 10px;
     right: 10px;
+    font-size: 1.5rem;
     background: none;
     border: none;
     cursor: pointer;
     color: #666;
-  }
-
-  &:hover {
-    color: #333;
   }
 }
 
@@ -85,16 +80,15 @@ const closePopup = () => {
 
   .user-avatar,
   .default-avatar {
-    font-size: 3rem;
+    display: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
     color: #1e90ff;
   }
 
   .user-info {
     text-align: center;
-    h3 {
-      margin: 0;
-      color: #333;
-    }
     p {
       margin: 4px 0 0;
       font-size: 0.9rem;

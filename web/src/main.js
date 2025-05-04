@@ -8,7 +8,7 @@ import router from './router'
 
 const config = {
   endpoint: 'https://3za1zw.logto.app/',
-  appId: 'ja904h6clsvvl0vllpgyq',
+  appId: '418j3uxd3r0pgfcmprfam',
 }
 
 const app = createApp(App)
