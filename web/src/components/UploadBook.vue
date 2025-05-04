@@ -26,7 +26,7 @@
             <n-input v-model:value="formValue.isbn" placeholder="请输入ISBN" />
           </n-form-item>
           <n-form-item label="书名" path="title" required>
-            <n-input v-model:value="formValue.title" placeholder="请输入书名" />
+            <n-input v-model:value="formValue.title" placeholder="自动使用文件名" readonly />
           </n-form-item>
           <n-form-item label="作者" path="author" required>
             <n-input v-model:value="formValue.author" placeholder="请输入作者" />
@@ -63,7 +63,7 @@
         <template #footer>
           <div style="display: flex; justify-content: flex-end; gap: 12px;">
             <n-button @click="showModal = false">取消</n-button>
-            <n-button type="primary" @click="handleUpload" :disabled="!formValue.file || !formValue.isbn || !formValue.title || !formValue.author">
+            <n-button type="primary" @click="handleUpload" :disabled="!formValue.file || !formValue.isbn || !formValue.author">
               上传
             </n-button>
           </div>
@@ -114,11 +114,6 @@ const rules = {
     message: '请输入ISBN',
     trigger: 'blur'
   },
-  title: {
-    required: true,
-    message: '请输入书名',
-    trigger: 'blur'
-  },
   author: {
     required: true,
     message: '请输入作者',
@@ -135,8 +130,11 @@ const rules = {
 function handleFileChange(options) {
   if (options.fileList.length > 0) {
     formValue.file = options.fileList[0].file
+    // 使用文件名（包括后缀）作为书名
+    formValue.title = options.fileList[0].file.name
   } else {
     formValue.file = null
+    formValue.title = ''
   }
 }
 
