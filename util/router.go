@@ -1,4 +1,3 @@
-// Todo：新增数据库记录
 package util
 
 import (
@@ -164,6 +163,22 @@ func SetupRouter(r *gin.Engine) {
 
 		c.JSON(200, gin.H{"message": "文件下载成功", "path": localPath})
 	})
+	// 新增获取书籍列表API
+	r.GET("/api/books", func(c *gin.Context) {
+		db, err := dao.InitDB()
+		if err != nil {
+			c.JSON(500, gin.H{"error": "数据库连接失败"})
+			return
+		}
+		books, err := dao.GetAllBooks(db)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "获取书籍列表失败"})
+			return
+		}
+		c.JSON(200, gin.H{"books": books})
+		fmt.Println("获取书籍列表成功")
+		fmt.Println(books)
+	})
 }
 
 // extractCoverFromEpub 从EPUB文件中提取封面图片
@@ -186,8 +201,7 @@ func extractCoverFromEpub(epubPath string, cfg *MinIOConfig) string {
 	for _, file := range readCloser.File {
 		// 查找文件名中包含"cover"的图片文件
 		fileName := strings.ToLower(file.Name)
-		if strings.Contains(fileName, "cover") && (strings.HasSuffix(fileName, ".jpg") ||
-			strings.HasSuffix(fileName, ".jpeg") || strings.HasSuffix(fileName, ".png")) {
+		if strings.Contains(fileName, "cover") {
 			coverFile = file
 			break
 		}

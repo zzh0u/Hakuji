@@ -15,7 +15,9 @@
         <p class="description">{{ bookItem.description }}</p>
       </div> -->
     </div>
-    <UploadBook @uploaded="refreshBooks" />
+    <div>
+      <UploadBook @uploaded="refreshBooks" />
+    </div>
   </div>
 </template>
 
