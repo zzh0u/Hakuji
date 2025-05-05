@@ -1,6 +1,7 @@
 <script setup>
 // import { ref } from 'vue'
 import LogButton from './LogButton.vue'
+import UploadBook from './UploadBook.vue'
 
 const props = defineProps({
   isLoggedIn: {
@@ -27,19 +28,17 @@ const closePopup = () => {
     </button>
 
     <div v-if="isLoggedIn" class="logged-in-content">
-      <i class="fas fa-user-circle"></i>
-      <div class="user-info">
-        <h3>用户名</h3>
-        <p>邮箱</p>
+      <div class="default-avatar">
+        <i class="fas fa-user-circle"></i>
       </div>
-      <button class="edit-btn">编辑信息</button>
+      <LogButton />
+      <UploadBook @uploaded="() => window.location.reload()" />
     </div>
 
     <div v-else class="logged-out-content">
       <div class="default-avatar">
         <i class="fas fa-user-circle"></i>
       </div>
-      <!-- <button class="login-btn">登陆</button> -->
       <LogButton />
     </div>
   </div>
@@ -76,45 +75,23 @@ const closePopup = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  height: 80%;
+  gap: 20px;
+  padding: 100px;
 
-  .user-avatar,
   .default-avatar {
-    display: center;
+    display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     font-size: 6rem;
     color: #1e90ff;
   }
 
-  .user-info {
-    text-align: center;
-    p {
-      margin: 4px 0 0;
-      font-size: 0.9rem;
-      color: #666;
-    }
-  }
-
-  .edit-btn {
+  .log-button {
     width: 100%;
-    padding: 8px;
-    background: #1e90ff;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
   }
-}
-
-.login-btn {
-  padding: 8px 16px;
-  background: #1e90ff;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
 }
 </style>

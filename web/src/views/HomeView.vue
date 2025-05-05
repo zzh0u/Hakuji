@@ -34,7 +34,6 @@ const themeOverrides = {
     errorColor: '#f5222d',
   },
 }
-
 </script>
 
 <style scoped>

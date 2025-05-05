@@ -2,10 +2,11 @@
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import { ref } from 'vue'
 import UserPopup from './UserPopup.vue'
+import { useLogto } from '@logto/vue'
 
-const isLoggedIn = ref(false)
 const showUserPopup = ref(false)
 const showMenu = ref(false)
+const { isAuthenticated } = useLogto()
 
 const openSearchLine = () => {
   // Todo:搜索功能实现
@@ -14,6 +15,7 @@ const openSearchLine = () => {
 
 const toggleUserPopup = () => {
   showUserPopup.value = !showUserPopup.value
+  console.log('isAuthenticated:', isAuthenticated.value, 'showUserPopup:', showUserPopup.value)
 }
 
 const toggleMenu = () => {
@@ -44,7 +46,7 @@ const toggleMenu = () => {
 
       <!-- 用户信息悬浮窗组件 -->
       <UserPopup
-        :is-logged-in="isLoggedIn"
+        :is-logged-in="isAuthenticated"
         :show-user-popup="showUserPopup"
         @close="toggleUserPopup"
       />

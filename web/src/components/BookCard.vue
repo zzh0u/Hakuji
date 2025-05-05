@@ -15,9 +15,7 @@
         <p class="description">{{ bookItem.description }}</p>
       </div> -->
     </div>
-    <div>
-      <UploadBook @uploaded="refreshBooks" />
-    </div>
+    <!-- 上传按钮已移至用户弹窗中 -->
   </div>
 </template>
 
@@ -25,7 +23,6 @@
 import { ref } from 'vue'
 import booksData from '../lib.json'
 import { useRouter } from 'vue-router'
-import UploadBook from './UploadBook.vue'
 
 const recentBooks = ref(booksData)
 const router = useRouter()
@@ -34,10 +31,6 @@ function goToDetail(id) {
   router.push({ name: 'book-detail', params: { id } })
 }
 
-function refreshBooks() {
-  // 这里可以根据实际情况刷新 recentBooks，比如重新读取 lib.json 或调用接口
-  window.location.reload()
-}
 </script>
 
 <style scoped>
