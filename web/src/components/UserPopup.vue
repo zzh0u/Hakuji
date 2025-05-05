@@ -87,11 +87,5 @@ const closePopup = () => {
     font-size: 6rem;
     color: #1e90ff;
   }
-
-  .log-button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
 }
 </style>

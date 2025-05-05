@@ -2,7 +2,7 @@
   <div class="upload-book">
     <button @click="showModal = true" class="upload-btn">上传书籍</button>
 
-    <n-modal v-model:show="showModal" style="width: 80%; max-width: 800px;">
+    <n-modal v-model:show="showModal" style="width: 80%; max-width: 800px">
       <n-card title="上传书籍" :bordered="false" size="huge" role="dialog" aria-modal="true">
         <n-form
           ref="formRef"
@@ -61,9 +61,13 @@
           </n-form-item>
         </n-form>
         <template #footer>
-          <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <div style="display: flex; justify-content: flex-end; gap: 12px">
             <n-button @click="showModal = false">取消</n-button>
-            <n-button type="primary" @click="handleUpload" :disabled="!formValue.file || !formValue.isbn || !formValue.author">
+            <n-button
+              type="primary"
+              @click="handleUpload"
+              :disabled="!formValue.file || !formValue.isbn || !formValue.author"
+            >
               上传
             </n-button>
           </div>
@@ -85,7 +89,7 @@ import {
   NButton,
   NUpload,
   NDatePicker,
-  useMessage
+  useMessage,
 } from 'naive-ui'
 
 const emit = defineEmits(['uploaded'])
@@ -105,26 +109,26 @@ const formValue = reactive({
   publisher: '',
   publishedDate: null,
   category: '',
-  contentSummary: ''
+  contentSummary: '',
 })
 
 const rules = {
   isbn: {
     required: true,
     message: '请输入ISBN',
-    trigger: 'blur'
+    trigger: 'blur',
   },
   author: {
     required: true,
     message: '请输入作者',
-    trigger: 'blur'
+    trigger: 'blur',
   },
   file: {
     required: true,
     message: '请选择文件',
     trigger: 'change',
-    validator: (rule, value) => !!formValue.file
-  }
+    validator: (rule, value) => !!formValue.file,
+  },
 }
 
 function handleFileChange(options) {
@@ -168,7 +172,10 @@ async function handleUpload() {
       formData.append('title', formValue.title)
       formData.append('author', formValue.author)
       formData.append('publisher', formValue.publisher || '')
-      formData.append('publishedDate', formValue.publishedDate ? new Date(formValue.publishedDate).toISOString() : '')
+      formData.append(
+        'publishedDate',
+        formValue.publishedDate ? new Date(formValue.publishedDate).toISOString() : '',
+      )
       formData.append('category', formValue.category || '')
       formData.append('contentSummary', formValue.contentSummary || '')
 
@@ -186,7 +193,7 @@ async function handleUpload() {
 }
 
 function resetForm() {
-  Object.keys(formValue).forEach(key => {
+  Object.keys(formValue).forEach((key) => {
     if (key === 'publishedDate') {
       formValue[key] = null
     } else {
@@ -203,7 +210,7 @@ function resetForm() {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .upload-btn {

@@ -59,3 +59,14 @@ export default {
     <button @click="onClickSignIn" class="auth-button">登录</button>
   </div>
 </template>
+
+<style>
+.auth-button {
+  padding: 10px 20px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+</style>
