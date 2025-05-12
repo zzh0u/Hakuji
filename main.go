@@ -1,6 +1,8 @@
 package main
 
-import "hakuji/util"
+import (
+	"hakuji/util"
+)
 
 func main() {
 	r := util.Service()

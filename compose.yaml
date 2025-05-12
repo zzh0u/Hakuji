@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:15-alpine  # 官方镜像，推荐固定版本
+    image: postgres:15-alpine 
     container_name: postgres
     environment:
       POSTGRES_USER: zzh0u  # 替换为你的用户名
@@ -26,3 +26,36 @@ services:
       - TZ=Asia/Shanghai  # 设置时区
     command: server /data --console-address ":9001"  # 启动命令
     restart: unless-stopped  # 容器退出时自动重启
+
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    depends_on:
+      - postgres
+      - minio
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=zzh0u
+      - DB_PASSWORD=123456
+      - DB_NAME=postgres
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ROOT_USER=zzh0u
+      - MINIO_ROOT_PASSWORD=123456789
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: hakuji-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+volumes:
+  postgres_data:

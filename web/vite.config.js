@@ -12,7 +12,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  // 配置代理
+  // 跨域访问
   server: {
     proxy: {
       '/api': {
